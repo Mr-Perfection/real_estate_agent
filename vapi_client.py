@@ -2,8 +2,9 @@ import requests
 
 class VapiClient:
     def __init__(self):
-        self.api_key = "606dfd10-467d-43a5-bf2e-a7650079bdf0"  # 🔐 Use your real private API key here
-        self.base_url = "https://api.vapi.ai"  # ✅ No /v1
+        self.api_key = "606dfd10-467d-43a5-bf2e-a7650079bdf0"  # Replace with your actual API key
+        self.phone_number_id = "06625064-2114-4c8b-90ac-8433f9daac3d"  # Your real phone number ID from Vapi 
+        self.base_url = "https://api.vapi.ai"
         self.headers = {
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json"
@@ -14,6 +15,7 @@ class VapiClient:
         print("📞 FULL URL:", url)
         print("🔐 API KEY START:", self.api_key[:6] + "...")
 
+        # ✅ Recommended: Use OpenAI's 'echo' voice for reliability
         payload = {
             "customer": {
                 "number": phone_number
@@ -22,25 +24,31 @@ class VapiClient:
                 "name": assistant_name,
                 "firstMessage": prompt,
                 "voice": {
-                    "voiceId": "nova",
-                    "provider": "azure"
+                    "provider": "openai",
+                    "voiceId": "echo"
                 },
                 "model": {
-                    "model": "gpt-4",
-                    "provider": "openai"
+                    "provider": "openai",
+                    "model": "gpt-3.5-turbo"
                 },
                 "transcriber": {
                     "provider": "deepgram"
                 }
             },
-            "phoneNumberId": "32dd50de-7880-4adb-b1d5-6954bd2a6ef5"  # 🔁 Replace this with your real number ID from Vapi dashboard
+            "phoneNumberId": self.phone_number_id
         }
 
-        response = requests.post(url, headers=self.headers, json=payload)
-        if response.status_code in [200, 202]:
-            print(f"✅ Call to {phone_number} queued successfully.")
-            print("🪄 Listen:", response.json().get("monitor", {}).get("listenUrl"))
-            print("🎛 Control:", response.json().get("monitor", {}).get("controlUrl"))
-        else:
-            print(f"❌ Call failed:", response.text)
-
+        try:
+            response = requests.post(url, headers=self.headers, json=payload)
+            if response.status_code in [200, 202]:
+                print(f"✅ Call to {phone_number} queued successfully.")
+                monitor = response.json().get("monitor", {})
+                print("🪄 Listen:", monitor.get("listenUrl"))
+                print("🎛 Control:", monitor.get("controlUrl"))
+                return True, "Call successfully queued."
+            else:
+                print(f"❌ Call failed:", response.text)
+                return False, f"Call failed: {response.text}"
+        except Exception as e:
+            print(f"❌ Exception during call:", str(e))
+            return False, f"Exception during call: {str(e)}"
