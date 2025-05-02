@@ -66,3 +66,13 @@ The application is built with:
 - Streamlit for the frontend
 - Python for backend processing
 - Various AI APIs for analysis
+
+### Temporal
+```sh
+ # start server
+ temporal server start-dev --db-filename mytemporal.db
+ # start worker
+ python run_worker.py
+ #start workflow
+ python run_workflow.py
+```
