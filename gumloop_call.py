@@ -8,7 +8,8 @@ user_id = "GOmsNcGoFfYWehO7H7LvKsWPkIe2"
 payload = {
     "user_id": user_id,
     "saved_item_id": "f8o3ZHfQWw8WSxbwV3H76S",
-    "pipeline_inputs": [{"input_name":"text","value":"$1,298,000\nStudio 1 ba1,400 sqft - House for sale"}]
+    "pipeline_inputs": [{"input_name":"text",
+                         "value":"Address: 512 Central Ave, Alameda, CA 94501 Price: $2,290,000 Bedrooms: None"}]
 }
 headers = {
     "Authorization": "Bearer bef77c7707d9472cbaa4734ac1156688",
