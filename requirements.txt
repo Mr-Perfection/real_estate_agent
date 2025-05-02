@@ -9,3 +9,4 @@ requests==2.31.0
 vapi-python==0.1.9
 gumloop==0.1.0
 temporalio==1.11.0
+apify-client
