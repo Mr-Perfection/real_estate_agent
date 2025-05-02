@@ -1,0 +1,10 @@
+Listing ID: 78654321
+Address: 123 Main Street, San Francisco, CA 94110
+Price: $1,295,000
+Bedrooms: 3
+Bathrooms: 2
+Square Feet: 1,400
+Status: For Sale
+Days on Zillow: 12
+URL: https://www.zillow.com/homedetails/78654321_zpid/
+Description: Beautiful updated home in the heart of the Mission District. Modern kitchen, spacious backyard, no garage.

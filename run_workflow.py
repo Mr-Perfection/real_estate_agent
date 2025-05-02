@@ -4,17 +4,18 @@ from temporalio.client import Client
 from temporalio.worker import Worker
 import asyncio
 from typing import Dict, Any
-import get_property_scraping
 
 from shared import PROPERTY_ANALYSIS_WORKFLOW_QUEUE_NAME
 
 # Define activity interfaces
 @activity.defn
-async def scrape_properties(search_url: str) -> Dict[str, Any]:
+async def scrape_properties(search_url: str) -> str:
     """Activity to scrape property data"""
     # This will be replaced with actual implementation
+    import get_property_scraping
     listing = get_property_scraping.main(zillow_url=search_url)
-    return listing
+    print(f"Listing: {listing}")
+    return listing[0]
     
     # return {
     #     'price': 500000,
@@ -23,14 +24,12 @@ async def scrape_properties(search_url: str) -> Dict[str, Any]:
     # }
 
 @activity.defn
-async def analyze_with_gumloop(property_data: Dict[str, Any]) -> Dict[str, Any]:
-    
+async def analyze_with_gumloop(property_data: str) -> Dict[str, Any]:
+    from gumloop_call import get_gumloop_data
     """Activity to analyze property with Gumloop"""
     # This will be replaced with actual implementation
-    return {
-        'issues': ['Sample issue 1', 'Sample issue 2'],
-        'confidence': 0.85
-    }
+    print(f"Property data: {property_data}")
+    return get_gumloop_data(property_data)
 
 @activity.defn
 async def estimate_rent(address: str) -> float:
@@ -133,7 +132,7 @@ async def run_workflow(search_url: str):
 
 async def main():
     """Example usage"""
-    search_url = "https://example.com/property/123"
+    search_url = 'https://www.zillow.com/homes/for_sale/?searchQueryState=%7B"isMapVisible"%3Atrue%2C"mapBounds"%3A%7B"west"%3A-124.61572460426518%2C"east"%3A-120.37225536598393%2C"south"%3A36.71199595991113%2C"north"%3A38.74934086729303%7D%2C"filterState"%3A%7B"sort"%3A%7B"value"%3A"days"%7D%2C"ah"%3A%7B"value"%3Atrue%7D%7D%2C"isListVisible"%3Atrue%2C"customRegionId"%3A"7d43965436X1-CRmxlqyi837u11_1fi65c"%7D'
     result = await run_workflow(search_url)
     print("Workflow Result:", result)
 

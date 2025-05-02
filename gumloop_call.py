@@ -2,39 +2,44 @@ import time
 
 import requests
 
-url = "https://api.gumloop.com/api/v1/start_pipeline"
-user_id = "GOmsNcGoFfYWehO7H7LvKsWPkIe2"
 
-payload = {
-    "user_id": user_id,
-    "saved_item_id": "f8o3ZHfQWw8WSxbwV3H76S",
-    "pipeline_inputs": [{"input_name":"text",
-                         "value":"Address: 512 Central Ave, Alameda, CA 94501 Price: $2,290,000 Bedrooms: None"}]
-}
-headers = {
-    "Authorization": "Bearer bef77c7707d9472cbaa4734ac1156688",
-    "Content-Type": "application/json"
-}
+def get_gumloop_data(text):
+    url = "https://api.gumloop.com/api/v1/start_pipeline"
+    user_id = "GOmsNcGoFfYWehO7H7LvKsWPkIe2"
 
-response = requests.request("POST", url, json=payload, headers=headers)
+    payload = {
+        "user_id": user_id,
+        "saved_item_id": "f8o3ZHfQWw8WSxbwV3H76S",
+        "pipeline_inputs": [{"input_name":"text",
+                            "value":text}]
+    }
+    headers = {
+        "Authorization": "Bearer bef77c7707d9472cbaa4734ac1156688",
+        "Content-Type": "application/json"
+    }
 
-data = response.json()
-run_id = data["run_id"]
+    response = requests.request("POST", url, json=payload, headers=headers)
 
-url = f"https://api.gumloop.com/api/v1/get_pl_run?run_id={run_id}&user_id={user_id}"
-headers = {
-    "Authorization": "Bearer bef77c7707d9472cbaa4734ac1156688"
-}
-
-while True:
-    response = requests.get(url, headers=headers)
     data = response.json()
-    if response.status_code != 200:
-        raise Exception(f"error {response.status_code}")
-    if data['state'] == 'RUNNING':
-        time.sleep(1)
-        continue
-    if data['state'] == 'DONE':
-        print(data['outputs']['output'])
-        break
-    raise Exception("Unknown state")
+    run_id = data["run_id"]
+
+    url = f"https://api.gumloop.com/api/v1/get_pl_run?run_id={run_id}&user_id={user_id}"
+    headers = {
+        "Authorization": "Bearer bef77c7707d9472cbaa4734ac1156688"
+    }
+    response = requests.get(url, headers=headers)
+    data = response.json()["outputs"]["output"]
+    return data
+
+# while True:
+#     response = requests.get(url, headers=headers)
+#     data = response.json()
+#     if response.status_code != 200:
+#         raise Exception(f"error {response.status_code}")
+#     if data['state'] == 'RUNNING':
+#         time.sleep(1)
+#         continue
+#     if data['state'] == 'DONE':
+#         print(data['outputs']['output'])
+#         break
+#     raise Exception("Unknown state")

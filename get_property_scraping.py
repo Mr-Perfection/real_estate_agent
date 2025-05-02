@@ -39,27 +39,31 @@ def get_zillow_listing(zillow_url):
     
     return "\n".join(listing_arr)
         
-def parse_property_string(property_string: str) -> dict:
+def parse_property_string(property_string: str) -> str:
     # Split the string by lines
-    lines = property_string.strip().split('\n')
-
+    lines = property_string.strip()
+    print(f"Lines: {lines}")
     # Extract address, price, and description
-    address = lines[0].replace("Address: ", "").strip()
-    price = lines[1].replace("Price: ", "").strip()
-    bedrooms = lines[2].replace("Bedrooms : ", "").strip()
+    # address = lines[0].replace("Address: ", "").strip()
+    # price = lines[1].replace("Price: ", "").strip()
+    # bedrooms = lines[2].replace("Bedrooms : ", "").strip()
 
     # Convert price to an integer (remove currency symbol and commas)
-    price = int(price.replace('$', '').replace(',', '').strip())
-    return {
-        'address': address,
-        'price': price,
-        'bedrooms': bedrooms
-    }
+    # price = int(price.replace('$', '').replace(',', '').strip())
+    # return {
+    #     'address': address,
+    #     'price': price,
+    #     'bedrooms': bedrooms
+    # }
+    return lines
     
 def main(zillow_url):
-    property_string = get_zillow_listing(zillow_url=zillow_url)
-    parse_property_string(property_string=property_string)
-    return parse_property_string
-
+    # property_string = get_zillow_listing(zillow_url=zillow_url)
+    # return parse_property_string(property_string=property_string)
+    return ['''----------------------------------------
+Address: 86 Belbrook Way, Atherton, CA 94027
+Price: $4,990,000 
+Bedrooms: None
+Detail URL: https://www.zillow.com/homedetails/86-Belbrook-Way-Atherton-CA-94027/15597922_zpid/''']
 if __name__ == "__main__":
     main()
