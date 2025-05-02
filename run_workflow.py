@@ -4,6 +4,7 @@ from temporalio.client import Client
 from temporalio.worker import Worker
 import asyncio
 from typing import Dict, Any
+import get_property_scraping
 
 from shared import PROPERTY_ANALYSIS_WORKFLOW_QUEUE_NAME
 
@@ -12,11 +13,14 @@ from shared import PROPERTY_ANALYSIS_WORKFLOW_QUEUE_NAME
 async def scrape_properties(search_url: str) -> Dict[str, Any]:
     """Activity to scrape property data"""
     # This will be replaced with actual implementation
-    return {
-        'price': 500000,
-        'address': '123 Main St',
-        'description': 'Sample property description'
-    }
+    listing = get_property_scraping.main(zillow_url=search_url)
+    return listing
+    
+    # return {
+    #     'price': 500000,
+    #     'address': '123 Main St',
+    #     'description': 'Sample property description'
+    # }
 
 @activity.defn
 async def analyze_with_gumloop(property_data: Dict[str, Any]) -> Dict[str, Any]:
